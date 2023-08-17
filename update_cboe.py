@@ -37,9 +37,11 @@ MONTHS              = {
                         12: "Z"
                     }
 
+
 EXPECTED_SETTLEMENT_COLS    = [ 'Product', 'Symbol', 'Expiration Date', 'Price' ]
 EXPECTED_VX_COLS            = [ 'Trade Date', 'Futures', 'Open', 'High', 'Low', 'Close', 'Settle', 'Change', 'Total Volume', 'EFP', 'Open Interest' ]
 FUTS_PATH                   = CONFIG["futs_path"]
+
 
 def update(date: str):
 
