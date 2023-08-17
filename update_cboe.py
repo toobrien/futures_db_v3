@@ -46,7 +46,7 @@ def update(date: str):
     t0 = time()
 
     fn = f"{FUTS_PATH}/{date}.parquet"
-    df = pl.read_parquet(fn) if exists(fn) else None
+    df = pl.read_parquet(fn) if exists(fn) else pl.DataFrame()
     
     id_col          = []
     exchange_col    = []
