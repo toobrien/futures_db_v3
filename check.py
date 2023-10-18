@@ -1,7 +1,10 @@
 import  polars          as      pl
-from    sys             import  argv
+from    sys             import  argv, path
 from    time            import  time
-from    ..reports.util  import  get_groups
+
+path.append("..")
+
+from    reports.util    import  get_groups
 
 
 def get_latest(symbol:str, start:str, end:str):
