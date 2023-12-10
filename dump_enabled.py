@@ -5,7 +5,7 @@ from sys                import argv
 
 if __name__ == "__main__":
 
-    mode        = arv[1]
+    mode        = argv[1]
     enabled     = []
 
     for sym, dfn in CONTRACT_SETTINGS.items():
