@@ -22,4 +22,4 @@ if __name__ == "__main__":
 
     elif mode == "cmd":
 
-        print(" ".join(enabled)
+        print(" ".join(enabled))
