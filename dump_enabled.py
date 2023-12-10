@@ -5,7 +5,8 @@ from sys                import argv
 
 if __name__ == "__main__":
 
-    mode        = argv[1]
+    dump_mode   = argv[1]
+    sym_mode    = argv[2]
     enabled     = []
 
     for sym, dfn in CONTRACT_SETTINGS.items():
@@ -14,12 +15,12 @@ if __name__ == "__main__":
 
             if "globex" in dfn:
 
-                enabled.append(f"{dfn['globex']}.FUT")
+                enabled.append(f"{dfn['globex']}.{sym_mode}")
 
-    if mode == "json":
+    if dump_mode == "json":
 
         print(dumps(enabled, indent = 2))
 
-    elif mode == "cmd":
+    elif dump_mode == "cmd":
 
         print(" ".join(enabled))
