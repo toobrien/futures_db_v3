@@ -144,8 +144,8 @@ if __name__ == "__main__":
     t_size = client.metadata.get_billable_size(**args)
 
     print(f"{start} - {end}")
-    print(f"cost:           {t_cost:0.4f}")
-    print(f"size:           {t_size} ({t_size / GB:0.2f} GB)")
+    print(f"s_cost:         {t_cost:0.4f}")
+    print(f"s_size:         {t_size} ({t_size / GB:0.2f} GB)")
 
     if PROMPT:
 
