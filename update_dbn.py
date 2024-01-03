@@ -1,17 +1,18 @@
-from    datetime    import  datetime
-from    enum        import  IntEnum
-from    json        import  dump, loads
-from    databento   import  Historical
-from    pandas      import  DataFrame
-from    typing      import  Dict, List
-from    time        import  time
+from contract_settings  import CONTRACT_SETTINGS
+from datetime           import datetime
+from enum               import IntEnum
+from json               import dump, loads
+from databento          import Historical
+from pandas             import DataFrame
+from typing             import Dict, List
+from time               import time
 
 
 # python daily_db.py 
 
 
 DATE_FMT    = "%Y-%m-%d"
-DB_PATH     = "./futs"
+DB_PATH     = "./.futs"
 DF_COLS     = [ 
                 "contract_id",
                 "exchange",
