@@ -32,6 +32,7 @@ EXCHANGES   = {
                 for _, settings in CONTRACT_SETTINGS.items()
                 if "globex" in settings
             }
+GB          = 1073741824
 MONTHS      = {
                 1: "F",
                 2: "G",
@@ -46,6 +47,8 @@ MONTHS      = {
                 11: "X",
                 12: "Z"
             }
+VERBOSE     = True
+PROMPT      = True
 
 
 class rec(IntEnum):
@@ -74,7 +77,7 @@ def format_recs(recs: List[List]):
         month       = MONTHS[int(exp[1])]
         year        = int(exp[0])
         sym         = sym[:-2] if not sym[-2].isdigit() else sym[:-3] # symMY or symMYY possible
-        exchange    = None # TODO: get from config
+        exchange    = EXCHANGES[sym]
         contract_id = f"{exchange}_{sym}{month}{year}"
 
         r[rec.contract_id]  = contract_id
@@ -119,12 +122,13 @@ if __name__ == "__main__":
 
     client          = Historical()
     rng             = client.metadata.get_dataset_range(dataset = "GLBX.MDP3")
-    config_fd       = open("./config.json", "r+") # TODO: refactor config
+    config_fd       = open("./config_dbn.json", "r+")
     config          = loads(config_fd.read())
-    expirations_fd  = open("./expirations.json", "r+") # TODO: refactor config
+    expirations_fd  = open("./expirations.json", "r+")
     expirations     = loads(expirations_fd.read())
     start           = config["daily_db_checkpoint"]
     end             = rng["end_date"]
+    today           = datetime.today().strftime(DATE_FMT)
     syms            = config["daily_db_futs"]
     args            = {
                         "dataset":      "GLBX.MDP3",
@@ -136,12 +140,23 @@ if __name__ == "__main__":
                     }
     to_write        = {}
 
-    cost = client.metadata.get_cost(**args)
-    size = client.metadata.get_billable_size(**args)
+    t_cost = client.metadata.get_cost(**args)
+    t_size = client.metadata.get_billable_size(**args)
 
     print(f"{start} - {end}")
-    print(f"cost:       {cost:0.4f}")
-    print(f"size:       {size} ({size / 1073741824:0.2f} GB)")
+    print(f"cost:           {t_cost:0.4f}")
+    print(f"size:           {t_size} ({t_size / GB:0.2f} GB)")
+
+    if PROMPT:
+
+        go = input("continue? [y/n]: ").lower()
+
+        if go == "n":
+
+            print("aborted")
+
+            exit()
+
 
     stats = client.timeseries.get_range(**args)
     stats = stats.to_df()
@@ -223,8 +238,19 @@ if __name__ == "__main__":
 
             # no expiration recorded, need to consult definition schema
 
-            args["symbols"] = [ symbol ]        
+            args["symbols"] = [ symbol ]
             dfns            = client.timeseries.get_range(**args)
+
+            if VERBOSE:
+
+                cost = dfns.metadata.get_cost(**args)
+                size = dfns.metadata.get_billable_size(**args)
+
+                t_cost += cost
+                t_size += size
+                
+                print(f"{symbol}\t${cost:0.4f}\t{size}\t{size / GB:0.2f} GB")
+            
             dfns            = dfns.to_df()
 
             # assume expiration is uniform across definition records
@@ -248,7 +274,7 @@ if __name__ == "__main__":
     
     # write config, expirations
 
-    config["daily_db_checkpoint"] = end
+    config["daily_db_checkpoint"] = today
 
     for to_write in [ 
         (config, config_fd),
@@ -263,4 +289,7 @@ if __name__ == "__main__":
         fd.truncate()
         fd.close()
     
-    print(f"elapsed:    {time() - t0:0.1f}s")
+    print(f"t_cost:         {t_cost:0.4f}")
+    print(f"t_size:         {t_size} ({t_size / GB:0.2f} GB)")
+    print(f"checkpoint:     {today}")
+    print(f"elapsed:        {time() - t0:0.1f}s")
