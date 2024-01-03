@@ -27,6 +27,11 @@ DF_COLS     = [
                 "oi",
                 "dte"
             ]
+EXCHANGES   = { 
+                settings["globex"] : settings["exchange"]
+                for _, settings in CONTRACT_SETTINGS.items()
+                if "globex" in settings
+            }
 MONTHS      = {
                 1: "F",
                 2: "G",
