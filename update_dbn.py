@@ -1,11 +1,11 @@
-from contract_settings  import CONTRACT_SETTINGS
-from datetime           import datetime
-from enum               import IntEnum
-from json               import dump, loads
-from databento          import Historical
-from pandas             import DataFrame
-from typing             import Dict, List
-from time               import time
+from contract_settings      import CONTRACT_SETTINGS
+from datetime               import datetime
+from enum                   import IntEnum
+from json                   import dump, loads
+from databento              import Historical
+from pandas                 import DataFrame
+from typing                 import Dict, List
+from time                   import time
 
 
 # python daily_db.py 
@@ -156,7 +156,6 @@ if __name__ == "__main__":
             print("aborted")
 
             exit()
-
 
     stats = client.timeseries.get_range(**args)
     stats = stats.to_df()
