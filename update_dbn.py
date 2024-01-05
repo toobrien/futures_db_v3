@@ -3,7 +3,7 @@ from datetime               import datetime
 from enum                   import IntEnum
 from json                   import dump, loads
 from databento              import Historical
-from pandas                 import DataFrame
+from pandas                 import concat, DataFrame
 from typing                 import Dict, List
 from time                   import time
 
@@ -157,8 +157,15 @@ if __name__ == "__main__":
 
             exit()
 
-    stats = client.timeseries.get_range(**args)
-    stats = stats.to_df()
+    dfs = []
+
+    for sym in syms:
+
+        args["symbols"] = [ sym ]
+
+        dfs.append(client.timeseries.get_range(**args).to_df())
+
+    stats = concat(dfs)
     stats = stats[[ "symbol", "ts_event", "stat_type", "price", "quantity" ]]
     
     stats["date"] = stats["ts_event"].dt.date
