@@ -165,7 +165,7 @@ if __name__ == "__main__":
 
         dfs.append(client.timeseries.get_range(**args).to_df())
 
-    stats = concat(dfs)
+    stats = concat(dfs, ignore_index = True)
     stats = stats[[ "symbol", "ts_event", "stat_type", "price", "quantity" ]]
     
     stats["date"] = stats["ts_event"].dt.date
