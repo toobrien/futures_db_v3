@@ -169,18 +169,19 @@ if __name__ == "__main__":
     stats = stats[[ "symbol", "ts_event", "stat_type", "price", "quantity" ]]
     
     stats["date"] = stats["ts_event"].dt.date
+    stats["date"] = stats["date"].astype(str)
 
-    dates = stats["date"].dt.date.unique()
+    dates = stats["date"].unique()
 
     for date in dates:
 
-        to_write[date] = {}
+        to_write[str(date)] = {}
 
     # record ohlcv and oi per symbol, date
         
     for row in stats:
 
-        date        = row["date"]
+        date        = str(row["date"])
         symbol      = row["symbol"]
         batch       = to_write[date]
         statistic   = row["stat_type"]
