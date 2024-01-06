@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
             # assume expiration is uniform across definition records
 
-            expiry              = dfns.iloc[0]["expiration"].dt.date
+            expiry              = str(dfns.iloc[0]["expiration"].date())
             expirations[symbol] = expiry
         
         sym_rec = to_write[date][symbol]
