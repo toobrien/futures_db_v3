@@ -252,8 +252,8 @@ if __name__ == "__main__":
 
             if VERBOSE:
 
-                cost = dfns.metadata.get_cost(**args)
-                size = dfns.metadata.get_billable_size(**args)
+                cost = client.metadata.get_cost(**args)
+                size = client.metadata.get_billable_size(**args)
 
                 t_cost += cost
                 t_size += size
