@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
     # record ohlcv and oi per symbol, date
         
-    for row in stats:
+    for _, row in stats.iterrows():
 
         date        = str(row["date"])
         symbol      = row["symbol"]
