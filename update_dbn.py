@@ -232,7 +232,7 @@ if __name__ == "__main__":
     args["stype_in"]    = "raw_symbol"
     args["symbols"]     = None
 
-    for row in stats:
+    for _, row in stats.iterrows():
 
         date    = row["date"]
         symbol  = row["symbol"]
