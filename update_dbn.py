@@ -47,7 +47,7 @@ MONTHS      = {
                 11: "X",
                 12: "Z"
             }
-VERBOSE     = True
+VERBOSE     = False
 PROMPT      = True
 
 
@@ -55,17 +55,17 @@ class rec(IntEnum):
 
     contract_id     = 0
     exchange        = 1
-    name            = 1
-    month           = 2
-    year            = 3
-    date            = 4
-    open            = 5
-    high            = 6
-    low             = 7
-    settle          = 8
-    volume          = 9
-    oi              = 10
-    dte             = 11
+    name            = 2
+    month           = 3
+    year            = 4
+    date            = 5
+    open            = 6
+    high            = 7
+    low             = 8
+    settle          = 9
+    volume          = 10
+    oi              = 11
+    dte             = 12
 
 OFFSET = -5
 
