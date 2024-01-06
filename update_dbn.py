@@ -67,6 +67,8 @@ class rec(IntEnum):
     oi              = 10
     dte             = 11
 
+OFFSET = -5
+
 
 def format_recs(recs: List[List]):
 
@@ -202,27 +204,27 @@ if __name__ == "__main__":
 
         if statistic == 1:
 
-            sym_rec[rec.open] = row["price"]
+            sym_rec[rec.open + OFFSET] = row["price"]
 
         elif statistic == 3:
 
-            sym_rec[rec.settle] = row["price"]
+            sym_rec[rec.settle + OFFSET] = row["price"]
         
         elif statistic == 4:
 
-            sym_rec[rec.low] = row["price"]
+            sym_rec[rec.low + OFFSET] = row["price"]
 
         elif statistic == 5:
 
-            sym_rec[rec.high] = row["price"]
+            sym_rec[rec.high + OFFSET] = row["price"]
         
         elif statistic == 6:
 
-            sym_rec[rec.volume] = row["quantity"]
+            sym_rec[rec.volume + OFFSET] = row["quantity"]
 
         elif statistic == 9:
 
-            sym_rec[rec.open_interest] = row["quantity"]
+            sym_rec[rec.oi + OFFSET] = row["quantity"]
 
     # calc dte
     
@@ -269,7 +271,7 @@ if __name__ == "__main__":
         expiry  = expirations[symbol]
         dte     = (datetime.strptime(expiry, DATE_FMT) - datetime.strptime(date, DATE_FMT)).days
 
-        sym_rec[rec.dte] = dte
+        sym_rec[rec.dte + OFFSET] = dte
 
     # batch by date, format records, and write to parquet
         
