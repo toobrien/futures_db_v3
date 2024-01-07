@@ -67,7 +67,7 @@ class rec(IntEnum):
     oi              = 11
     dte             = 12
 
-OFFSET = -5
+OFFSET = -6
 
 
 def format_recs(recs: List[List]):
