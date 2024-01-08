@@ -111,12 +111,20 @@ def to_df(
     ]
 
     recs = format_recs(recs)
+    recs = [ r for r in recs if recs[rec.settle] ]
 
-    df = DataFrame(recs, columns = DF_COLS)
+    if recs:
 
-    df.sort_values(by = [ "name", "dte" ])
+        df = DataFrame(recs, columns = DF_COLS)
+        df.sort_values(by = [ "name", "dte" ])
 
-    return df
+        return df
+    
+    else: 
+    
+        # no settlement for date
+
+        return None
 
 
 if __name__ == "__main__":
@@ -280,7 +288,9 @@ if __name__ == "__main__":
 
         df = to_df(date, recs)
 
-        df.to_parquet(path = f"{DB_PATH}/{date}.parquet")
+        if df:
+
+            df.to_parquet(path = f"{DB_PATH}/{date}.parquet")
     
     # write config, expirations
 
