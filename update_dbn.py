@@ -24,6 +24,7 @@ DF_COLS     = [
                 "high",
                 "low",
                 "settle",
+                "volume",
                 "oi",
                 "dte"
             ]
