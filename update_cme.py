@@ -3,8 +3,10 @@ from    contract_settings   import  CONTRACT_SETTINGS
 from    csv                 import  reader
 from    datetime            import  datetime
 from    ftplib              import  FTP
+from    os                  import  environ
 from    os.path             import  exists
 import  polars              as      pl
+from    requests            import  get
 from    time                import  time
 from    typing              import  List
 
@@ -292,44 +294,42 @@ def get_opts_cols(rows: List):
     return df
 
 
-def update(date: str, new: bool):
+def update(date: str):
 
     t0 = time()
     
-    ftp_date    = date.replace("-", "")
-    futs_fn     = f"{CONFIG['futs_path']}/{date}.parquet"
-    opts_fn     = f"{CONFIG['opts_path']}/{date}.parquet"
-    futs_df     = pl.read_parquet(futs_fn) if exists(futs_fn) else pl.DataFrame()
-    opts_df     = pl.read_parquet(opts_fn) if exists(opts_fn) else pl.DataFrame()
-    files       = CONFIG["cme_files_new"]
+    date    = date.replace("-", "")
+    dm_url  = CONFIG["datamine_url"]
+    dm_cfgs = CONFIG["datamine_configs"]
+    dm_user = environ[CONFIG["datamine_id"]]
+    dm_pass = environ[CONFIG["datamine_pass"]]
+    creds   = (dm_user, dm_pass) 
+    futs_fn = f"{CONFIG['futs_path']}/{date}.parquet"
+    opts_fn = f"{CONFIG['opts_path']}/{date}.parquet"
+    futs_df = pl.read_parquet(futs_fn) if exists(futs_fn) else pl.DataFrame()
+    opts_df = pl.read_parquet(opts_fn) if exists(opts_fn) else pl.DataFrame()
+    urls    = [
+                dm_url.format(date, *cfg)
+                for cfg in dm_cfgs
+            ]
 
-    if not new:
-
-        # old files have date in filename, like: cbt.settle.{yyyymmdd}.s.csv
-
-        files       = [
-                        file.format(ftp_date)
-                        for file in CONFIG["cme_files_old"]
-                    ]
-
-    ftp = FTP(CONFIG["cme_ftp"])
-    
-    ftp.login()
-    ftp.cwd("settle")
-
-    for file in files:
-
-        rows = []
+    for url in urls:
         
         t1 = time()
 
-        ftp.retrlines(f"RETR {file}", rows.append)
+        res = get(url, auth = creds)
 
-        print(f"{'RETR':30}{file:30}{time() - t1:0.1f}s")
+        print(f"{'GET':30}{f'{url} {res.status_code}':100}{time() - t1:0.1f}s")
+
+        if res.status_code != 200:
+
+            continue
+
+        rows = res.text.split()
 
         if rows[0].split(",") != EXPECTED_COLS:
 
-            print(f"error: unexpected column format in {file}")
+            print(f"error: unexpected column format in {url}")
 
         t2 = time()
 
@@ -343,7 +343,7 @@ def update(date: str, new: bool):
 
             futs_df = df
 
-        print(f"{'update_cme.insert_fut_rows':30}{file:30}{time() - t2:0.1f}s")
+        print(f"{'update_cme.insert_fut_rows':30}{url:100}{time() - t2:0.1f}s")
         
         t3 = time()
 
@@ -357,7 +357,7 @@ def update(date: str, new: bool):
 
             opts_df = df
 
-        print(f"{'update_cme.insert_opt_rows':30s}{file:30}{time() - t3:0.1f}s")
+        print(f"{'update_cme.insert_opt_rows':30s}{url:100}{time() - t3:0.1f}s")
 
         pass
 
@@ -366,13 +366,13 @@ def update(date: str, new: bool):
     futs_df = futs_df.unique(maintain_order = True).sort([ "contract_id", "date" ])
     futs_df.write_parquet(futs_fn)
 
-    print(f"{'update_cme:write_futs_db':30s}{file:30}{time() - t5:0.1f}s")
+    print(f"{'update_cme:write_futs_db':30s}{url:100}{time() - t5:0.1f}s")
 
     t6 = time()
 
     opts_df = opts_df.unique(maintain_order = True).sort([ "date", "name", "expiry", "strike" ])
     opts_df.write_parquet(opts_fn)
 
-    print(f"{'update_cme:write_opts_db':30s}{file:30}{time() - t6:0.1f}s")
+    print(f"{'update_cme:write_opts_db':30s}{url:100}{time() - t6:0.1f}s")
 
     print(f"{'update_cme.update':30}{time() - t0:0.1f}s")

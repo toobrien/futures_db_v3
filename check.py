@@ -1,23 +1,47 @@
+from    cat_df          import  cat_df
 import  polars          as      pl
 from    sys             import  argv, path
 from    time            import  time
 
-path.append("..")
 
-from    reports.util    import  get_groups
+def get_latest(
+    symbol: str, 
+    start:  str, 
+    end:    str
+):
 
+    parent_symbol = symbol.split("_")[1][:-5]
 
-def get_latest(symbol:str, start:str, end:str):
-
-    term_days = get_groups(symbol, start, end)
+    rows =  cat_df(
+                "futs", 
+                parent_symbol,
+                start, 
+                end
+            ).filter(
+                (pl.col("contract_id") == symbol)
+            ).sort(
+                [ "date", "year", "month" ]
+            ).select(
+                [
+                    "contract_id",
+                    "date",
+                    "name",
+                    "month",
+                    "year",
+                    "settle",
+                    "dte",
+                    "volume",
+                    "oi"
+                ]
+            ).rows()
 
     # check records for most recent day
 
-    for row in term_days[-1]:
+    for row in rows:
 
         print(row)
 
-    print(f"num_days: {len(term_days)}")
+    print(f"num_days: {len(rows)}")
 
 
 def get_dates(symbol: str):
@@ -69,7 +93,7 @@ if __name__ == "__main__":
         start   = argv[3]
         end     = argv[4]
 
-        get_latest(argv[1], argv[2], argv[3])
+        get_latest(symbol, start, end)
 
     elif test == "get_dates":
 

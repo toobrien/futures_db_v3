@@ -17,13 +17,15 @@ CONFIG = {
         "comex.settle.{0}.s.csv",
         "nymex.settle.{0}.s.csv"
     ],
-    "datamine_url": "https://datamine.cmegroup.com/cme/api/v1/download?fid={0}-STLBASICPLS_{1}_SETTLE_S_{2}",
-    "datamine_configs": [
-        ( "CBT",    1 ),
-        ( "CME",    1 ),
-        ( "CMX",    1 ),
-        ( "NYMX",   0 )
-    ],
+    "datamine_id":          "DATAMINE_ID",
+    "datamine_pass":        "DATAMINE_PASS",
+    "datamine_url":         "https://datamine.cmegroup.com/cme/api/v1/download?fid={0}-STLBASICPLS_{1}_SETTLE_S_{2}",
+    "datamine_configs":     [
+                                ( "CBT",    1 ),
+                                ( "CME",    1 ),
+                                ( "CMX",    1 ),
+                                ( "NYMX",   0 )
+                            ],
     "cboe_settlements_url": "https://www.cboe.com/us/futures/market_statistics/settlement/csv?dt={0}",
     "vx_url":               "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_{0}.csv",
     "wasde": {

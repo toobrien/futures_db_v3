@@ -1,4 +1,4 @@
-from    datetime        import datetime
+from    datetime        import datetime, timedelta
 import  update_cboe
 import  update_cme
 import  update_spot
@@ -9,9 +9,9 @@ from    time            import time
 # example usage:
 #
 #   - python update.py
-#   - python update.py 2023-04-20
+#   - python update.py 2024-02-12
 #
-#   The first form updates the database with the most recent day's settlements.
+#   The first form updates the database with the yesterday's settlements.
 #   The second form attempts to update the database with a given day's settlement values.
 #   Note that the CME FTP retains about a month of old data. CBOE offers considerably more.
 
@@ -19,7 +19,7 @@ from    time            import time
 if __name__ == "__main__":
 
     t0      = time()
-    date    = datetime.strftime(datetime.today(), "%Y-%m-%d")
+    date    = datetime.strftime(datetime.today() - timedelta(days = 1), "%Y-%m-%d")
     new     = True
 
     if len(argv) > 1:
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         new     = False
 
     update_cboe.update(date)
-    update_cme.update(date, new)
+    update_cme.update(date)
     update_spot.update()
     update_wasde.update()
 
