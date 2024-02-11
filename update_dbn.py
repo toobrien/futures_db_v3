@@ -11,6 +11,9 @@ from time                   import time
 # python daily_db.py 
 
 
+# NOT COMPLETE OR USED
+
+
 DATE_FMT    = "%Y-%m-%d"
 DB_PATH     = "./.futs"
 DF_COLS     = [ 
