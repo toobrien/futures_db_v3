@@ -11,9 +11,8 @@ from    time            import time
 #   - python update.py
 #   - python update.py 2024-02-12
 #
-#   The first form updates the database with the yesterday's settlements.
+#   The first form updates the database with the yesterday's settlements (available after midnight CST).
 #   The second form attempts to update the database with a given day's settlement values.
-#   Note that the CME FTP retains about a month of old data. CBOE offers considerably more.
 
 
 if __name__ == "__main__":
