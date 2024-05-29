@@ -298,14 +298,15 @@ def update(date: str):
 
     t0 = time()
     
+    fn_date = date
     date    = date.replace("-", "")
     dm_url  = CONFIG["datamine_url"]
     dm_cfgs = CONFIG["datamine_configs"]
     dm_user = environ[CONFIG["datamine_id"]]
     dm_pass = environ[CONFIG["datamine_pass"]]
     creds   = (dm_user, dm_pass) 
-    futs_fn = f"{CONFIG['futs_path']}/{date}.parquet"
-    opts_fn = f"{CONFIG['opts_path']}/{date}.parquet"
+    futs_fn = f"{CONFIG['futs_path']}/{fn_date}.parquet"
+    opts_fn = f"{CONFIG['opts_path']}/{fn_date}.parquet"
     futs_df = pl.read_parquet(futs_fn) if exists(futs_fn) else pl.DataFrame()
     opts_df = pl.read_parquet(opts_fn) if exists(opts_fn) else pl.DataFrame()
     urls    = [

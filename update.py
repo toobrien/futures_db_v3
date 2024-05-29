@@ -3,6 +3,7 @@ import  update_cboe
 import  update_cme
 import  update_spot
 import  update_wasde
+import  update_futc
 from    sys             import argv
 from    time            import time
 
@@ -30,5 +31,6 @@ if __name__ == "__main__":
     update_cme.update(date)
     update_spot.update()
     update_wasde.update()
+    update_futc.update()
 
     print(f"{'update':30s}{date:30s}{time() - t0:0.1f}")

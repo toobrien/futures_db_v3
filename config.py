@@ -3,6 +3,7 @@ import polars as pl
 
 CONFIG = {
     "futs_path":    "./futs",
+    "futc_path":    "./futc",
     "opts_path":    "./opts",
     "cme_ftp":      "ftp.cmegroup.com",
     "cme_files_new": [
