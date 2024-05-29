@@ -7,9 +7,28 @@ from    time    import  time
 # absolute paths for use in other modules
 
 CFG = {
+    "futc": ( "/Users/taylor/trading/daily/data/futc", "" ),
     "futs": ( "/Users/taylor/trading/daily/data/futs", "name"               ),
     "opts": ( "/Users/taylor/trading/daily/data/opts", "underlying_symbol"  )
 }
+
+
+def get_futc(
+    symbol: str,
+    start:  str = "1900-01-01",
+    end:    str = "2999-01-01"
+):
+    
+    path = CFG["futc"][0]
+
+    df = pl.read_parquet(
+        f"{path}/{symbol}.parquet"
+    ).filter(
+        (pl.col("date") >= start) &
+        (pl.col("date") <= end)
+    )
+    
+    return df
 
 
 def cat_df(
