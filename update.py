@@ -30,7 +30,7 @@ if __name__ == "__main__":
     update_cboe.update(date)
     update_cme.update(date)
     update_spot.update()
-    update_wasde.update()
+    #update_wasde.update()
     update_futc.update()
 
     print(f"{'update':30s}{date:30s}{time() - t0:0.1f}")

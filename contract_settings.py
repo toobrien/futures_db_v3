@@ -568,6 +568,8 @@ CONTRACT_SETTINGS = {
     },
     "CBOT Dow Jones Ind Avg (DJIA)": {
         "srf": "DJ",
+        "globex": "YM",
+        "scale": 1.0,
         "exchange": "CBOT",
         "enabled": False
     },
